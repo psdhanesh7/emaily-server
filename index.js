@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 
+require('./models/User');
+
 const keys = require('./config/keys');
 const authRouter = require('./routes/authRoutes');
 
