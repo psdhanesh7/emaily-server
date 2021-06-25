@@ -29,8 +29,8 @@ router.post('/login', async (req, res) => {
         if(!user) return res.json({success: false, message: 'Invalid username or password'});
 
         user.comparePassword(password, async (err, isMatch) => {
-            if(err) return done(err);
-            if(!isMatch) return done(null, false, { success: false, message: 'Invalid email or password' });
+            if(err) return res.json({success: false, message: err.message});
+            if(!isMatch) return res.json({ success: false, message: 'Invalid email or password' });
 
             const token = await jwt.sign({id: user._id}, keys.JWT_SECRET_TOKEN);
             res.json({success: true, token})
