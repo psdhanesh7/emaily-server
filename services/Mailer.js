@@ -6,7 +6,7 @@ module.exports = async ({ subject, recipients }, content) => {
     try {
         sgMail.setApiKey(keys.SENDGRID_API_KEY);
         const formattedRecipients = recipients;
-        console.log(formattedRecipients);
+        // console.log(formattedRecipients);
         //   const formattedRecipients = recipients.map(({email}) => email);
         const msg = {
             to: formattedRecipients,
@@ -15,7 +15,7 @@ module.exports = async ({ subject, recipients }, content) => {
             html: content,
         };
         const response =  await sgMail.send(msg);
-        console.log(response);
+        // console.log(response);
         console.log('Email send');
     } catch(err) {
         console.log(err.message)

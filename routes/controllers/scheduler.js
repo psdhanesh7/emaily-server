@@ -1,12 +1,38 @@
 const cron = require('node-cron');
+const mongoose = require('mongoose');
 const Mailer = require('../../services/Mailer');
 const emailTemplate = require('../../services/emailTemplates/emailTemplate');
+const Email = mongoose.model('emails');
 
+const recurringScheduler = async (email, { timeGap }) => {
 
-const recurringScheduler = (email, timeGap) => {
+  var count = 0;
+  var emailDocId;
+
+  try {
+    const response = await email.save();
+    emailDocId = response._id;
+    console.log(emailDocId);
+  } catch(err) {
+    console.log(err.message);
+  }
+
   cron.schedule(`*/${timeGap} * * * * *`, async () => {
-    console.log('running a task every 30 sec');
+    console.log(`running a task every ${timeGap} sec`);
     // Send your email here!
+    
+    try {
+
+      await Mailer(email, emailTemplate(email));
+      email.sendDate = Date.now();
+      count += 1;
+
+      await Email.updateOne({ _id: emailDocId}, { $set: {"count": count, "sendDate": Date.now()}});
+      console.log(`Updated count successfully: ${count}`);
+
+    } catch(err) {
+      console.log(err.message);
+    }
 
   }, { timezone: "Asia/Kolkata" });
 }
@@ -22,7 +48,7 @@ const weeklyScheduler = (email, { day, time }) => {
       const response = await Mailer(email, emailTemplate(email));
       email.sendDate = Date.now();
   
-      email.save();
+      await email.save();
     } catch(err) {
       console.log(err.message);
     }
@@ -41,7 +67,7 @@ const monthlyScheduler = (email, { date, time }) => {
       const response = await Mailer(email, emailTemplate(email));
       email.sendDate = Date.now();
   
-      email.save();
+      await email.save();
     } catch(err) {
       console.log(err.message);
     }
@@ -60,7 +86,7 @@ const yearlyScheduler = (email, { date, month, time }) => {
       const response = await Mailer(email, emailTemplate(email));
       email.sendDate = Date.now();
   
-      email.save();
+      await email.save();
     } catch(err) {
       console.log(err.message);
     }

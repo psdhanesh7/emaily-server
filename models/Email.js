@@ -9,7 +9,8 @@ const emailSchema = new Schema({
     _user: { type: Schema.Types.ObjectId, ref: 'User' },
     createdDate: Date,
     type: String,
-    sendDate: Date
+    sendDate: Date,
+    count: { type: Number, default: 0 }
     // sent: Boolean
 });
 
