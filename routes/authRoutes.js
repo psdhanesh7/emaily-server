@@ -4,9 +4,7 @@ const User = require('mongoose').model('User');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const keys = require('../config/keys');
-const passport=require('passport');
-const LocalStrategy=require('passport-local').Strategy;
-
+const passport = require('passport');
 
 passport.use(new GoogleStrategy({
     clientID: keys.client_id,
