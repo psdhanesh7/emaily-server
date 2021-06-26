@@ -11,7 +11,7 @@ const recurringScheduler = async (email, { timeGap }) => {
 
   try {
     const emailDoc = new Email(email);
-    const response = await email.save();
+    const response = await emailDoc.save();
     emailDocId = response._id;
     console.log(emailDocId);
   } catch(err) {
@@ -67,7 +67,9 @@ const weeklyScheduler = async (email, { day, time }) => {
       } else {
         email.sendDate = Date.now();
         email.count = 1;
-        await email.save();
+        await Email.insertMany([email]);
+
+        console.log('Inserted new document');
       }
 
     } catch(err) {
@@ -150,7 +152,9 @@ const yearlyScheduler = async (email, { date, month, time }) => {
       } else {
         email.sendDate = Date.now();
         email.count = 1;
-        await email.save();
+        await Email.insertMany([email]);
+
+        console.log('Inserted new document');
       }
 
       // email.sendDate = Date.now();
