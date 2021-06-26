@@ -7,7 +7,7 @@ const Mailer = require('../services/Mailer');
 
 const Email = mongoose.model('emails');
 
-router.post('/', authenticatedOnly, (req, res) => {
+router.post('/', authenticatedOnly, async (req, res) => {
     const { title, subject, body, recipients } = req.body;
     console.log(title, subject, body, recipients.split(',').map(recipient => recipient.trim()), req.user);
 
@@ -20,7 +20,7 @@ router.post('/', authenticatedOnly, (req, res) => {
     });
 
     // Great place to create an email
-    const response = Mailer(email, emailTemplate(email));
+    const response = await Mailer(email, emailTemplate(email));
     // const response = mailer.send();
 
     res.send(response);

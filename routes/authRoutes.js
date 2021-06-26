@@ -1,8 +1,25 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const User = require('mongoose').model('User');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const keys = require('../config/keys');
+const passport=require('passport');
+const LocalStrategy=require('passport-local').Strategy;
+
+
+passport.use(new GoogleStrategy({
+    clientID: keys.client_id,
+    clientSecret: keys.secret,
+    callbackURL: "http://localhost:3000/auth/google/email",
+    userProfileURL:"https://www.googleapis.com/oauth2/v3/userinfo"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
 
 router.post('/signup', async (req, res) => {
 
@@ -40,5 +57,20 @@ router.post('/login', async (req, res) => {
         return res.send(err.message);
     }
 })
+
+
+
+
+
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile'] }));
+
+router.get('/auth/google/email', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+
 
 module.exports = router;
