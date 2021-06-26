@@ -11,7 +11,7 @@ const Email = mongoose.model('emails');
 router.post('/recurring', authenticatedOnly, async (req, res) => {
     const { title, subject, body, recipients, schedule } = req.body;
     
-    const email = new Email({
+    const email = {
         title,
         subject,
         body,
@@ -19,7 +19,7 @@ router.post('/recurring', authenticatedOnly, async (req, res) => {
         _user: req.user.id,
         createdDate: Date.now(),
         type: 'weekly'
-    });
+    };
 
     try {
         await recurringScheduler(email, schedule);
@@ -33,7 +33,7 @@ router.post('/weekly', authenticatedOnly, async (req, res) => {
 
     const { title, subject, body, recipients, schedule } = req.body;
 
-    const email = new Email({
+    const email = {
         title,
         subject,
         body,
@@ -41,7 +41,7 @@ router.post('/weekly', authenticatedOnly, async (req, res) => {
         _user: req.user.id,
         createdDate: Date.now(),
         type: 'weekly'
-    });
+    };
 
     try {
         await weeklyScheduler(email, schedule);
@@ -55,7 +55,7 @@ router.post('/weekly', authenticatedOnly, async (req, res) => {
 router.post('/monthly', authenticatedOnly, async (req, res) => {
     const { title, subject, body, recipients, schedule } = req.body;
 
-    const email = new Email({
+    const email = {
         title,
         subject,
         body,
@@ -63,7 +63,9 @@ router.post('/monthly', authenticatedOnly, async (req, res) => {
         _user: req.user.id,
         createdDate: Date.now(),
         type: 'monthly'
-    });
+    };
+
+    console.log(email);
     
     try {
         await monthlyScheduler(email, schedule);
@@ -76,7 +78,7 @@ router.post('/monthly', authenticatedOnly, async (req, res) => {
 router.post('/yearly', authenticatedOnly, async (req, res) => {
     const { title, subject, body, recipients, schedule } = req.body;
 
-    const email = new Email({
+    const email = {
         title,
         subject,
         body,
@@ -84,7 +86,7 @@ router.post('/yearly', authenticatedOnly, async (req, res) => {
         _user: req.user.id,
         createdDate: Date.now(),
         type: 'yearly'
-    });
+    };
     
     try {
         await yearlyScheduler(email, schedule);

@@ -10,6 +10,7 @@ const recurringScheduler = async (email, { timeGap }) => {
   var emailDocId;
 
   try {
+    const emailDoc = new Email(email);
     const response = await email.save();
     emailDocId = response._id;
     console.log(emailDocId);
@@ -37,7 +38,19 @@ const recurringScheduler = async (email, { timeGap }) => {
   }, { timezone: "Asia/Kolkata" });
 }
 
-const weeklyScheduler = (email, { day, time }) => {
+const weeklyScheduler = async (email, { day, time }) => {
+
+  var count = 0;
+  var emailDocId;
+
+  try {
+    const emailDoc = new Email(email);
+    const response = await emailDoc.save();
+    emailDocId = response._id;
+    console.log(emailDocId);
+  } catch(err) {
+    console.log(err);
+  }
 
   const [hour, minute, second] = time.split(':');
   // sec+' '+min+' '+hour+' '+'* * Sunday'
@@ -46,9 +59,17 @@ const weeklyScheduler = (email, { day, time }) => {
 
     try {
       const response = await Mailer(email, emailTemplate(email));
-      email.sendDate = Date.now();
-  
-      await email.save();
+      count += 1;
+
+      if(count == 1) {
+        await Email.updateOne({ _id: emailDocId }, {$set: { "count": count, "sendDate": Date.now() }});
+        console.log('Updated to sent');
+      } else {
+        email.sendDate = Date.now();
+        email.count = 1;
+        await email.save();
+      }
+
     } catch(err) {
       console.log(err.message);
     }
@@ -56,18 +77,42 @@ const weeklyScheduler = (email, { day, time }) => {
   
 }
 
-const monthlyScheduler = (email, { date, time }) => {
+const monthlyScheduler = async (email, { date, time }) => {
+
+  var count = 0;
+  var emailDocId;
+
+  try {
+    const emailDoc = new Email(email);
+    const response = await emailDoc.save();
+    emailDocId = response._id;
+    console.log(emailDocId);
+  } catch(err) {
+    console.log(err);
+  }
+
   const [hour, minute, second] = time.split(':');
 
   // sec+' '+min+' '+hour+' '+dat+'  * *'
   cron.schedule(`${second} ${minute} ${hour} ${date} * *`, async () => {
+  // cron.schedule(`*/10 * * * * *`, async () => {
+
     console.log('running a task every minute');
     // Send your email here!
     try {
       const response = await Mailer(email, emailTemplate(email));
-      email.sendDate = Date.now();
-  
-      await email.save();
+      count += 1;
+
+      if(count == 1) {
+        await Email.updateOne({ _id: emailDocId }, {$set: { "count": count, "sendDate": Date.now() }});
+        console.log('Updated to sent');
+      } else {
+        email.sendDate = Date.now();
+        email.count = 1;
+        await Email.insertMany([email]);
+
+        console.log('Inserted new document');
+      }
     } catch(err) {
       console.log(err.message);
     }
@@ -75,7 +120,20 @@ const monthlyScheduler = (email, { date, time }) => {
 
 }
 
-const yearlyScheduler = (email, { date, month, time }) => {
+const yearlyScheduler = async (email, { date, month, time }) => {
+
+  var count = 0;
+  var emailDocId;
+
+  try {
+    const emailDoc = new Email(email);
+    const response = await emailDoc.save();
+    emailDocId = response._id;
+    console.log(emailDocId);
+  } catch(err) {
+    console.log(err);
+  }
+
   const [hour, minute, second] = time.split(':');
 
   // '30 30 10 30 12 *'
@@ -84,9 +142,20 @@ const yearlyScheduler = (email, { date, month, time }) => {
     // Send your mail here!
     try {
       const response = await Mailer(email, emailTemplate(email));
-      email.sendDate = Date.now();
+      count += 1;
+
+      if(count == 1) {
+        await Email.updateOne({ _id: emailDocId }, {$set: { "count": count, "sendDate": Date.now() }});
+        console.log('Updated to sent');
+      } else {
+        email.sendDate = Date.now();
+        email.count = 1;
+        await email.save();
+      }
+
+      // email.sendDate = Date.now();
   
-      await email.save();
+      // await email.save();
     } catch(err) {
       console.log(err.message);
     }
