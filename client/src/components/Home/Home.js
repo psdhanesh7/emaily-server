@@ -12,7 +12,7 @@ export default function Home(props) {
     console.log(props);
     const res = await axios({
       method: 'GET',
-      url: 'http://localhost:3000/api/emails/scheduled',
+      url: '/api/emails/scheduled',
       headers: {
         authorization: `BEARER ${props.token}`
       }

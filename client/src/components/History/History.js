@@ -11,7 +11,7 @@ export default function History({ token }) {
   useEffect(async () => {
     const res = await axios({
       method: 'GET',
-      url: 'http://localhost:3000/api/emails/history',
+      url: '/api/emails/history',
       headers: {
         authorization: `BEARER ${token}`
       }

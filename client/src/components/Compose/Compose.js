@@ -62,11 +62,11 @@ export default function Compose({token}) {
         switch(input.t) {
             case 'recurring':
                 // do the processing here
-                scheduleMails('http://localhost:3000/api/emails/recurring', { timeGap: 30 });
+                scheduleMails('/api/emails/recurring', { timeGap: 30 });
                 break;
             case 'weekly':
                 return scheduleMails(
-                    'http://localhost:3000/api/emails/weekly', 
+                    '/api/emails/weekly', 
                     { 
                         day: input.day, 
                         time: input.time 
@@ -75,7 +75,7 @@ export default function Compose({token}) {
                 break;
             case 'monthly':
                 scheduleMails(
-                    'https:localhost:3000/api/emails/monthly', 
+                    '/api/emails/monthly', 
                     { 
                         date: input.date,
                         time: input.time 
@@ -84,7 +84,7 @@ export default function Compose({token}) {
                 break;
             case 'yearly':
                 scheduleMails(
-                    'http://localhost:3000/api/emails/yearlyy', 
+                    '/api/emails/yearlyy', 
                     { 
                         month: input.month, 
                         date: input.date, 

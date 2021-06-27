@@ -16,7 +16,7 @@ export default function Login({ setToken }) {
         e.preventDefault();
         
         console.log(username, password);
-        const res = await axios.post('http://localhost:3000/auth/login', { email: username, password });
+        const res = await axios.post('/auth/login', { email: username, password });
         console.log(res.data.token);
         localStorage.setItem('token', res.data.token)
       
@@ -24,7 +24,7 @@ export default function Login({ setToken }) {
     }
 
     const handleGoogleAuth = async (e) => {
-        const res = await axios.get('https://emailserver-backend.herokuapp.com/auth/google');
+        const res = await axios.get('/auth/google');
         console.log(res.data.token);
         localStorage.setItem('token', res.data.token)
       
@@ -32,7 +32,7 @@ export default function Login({ setToken }) {
     }
 
     const handleSignUp = async (e) => {
-        const res = await axios.post('http://localhost:3000/auth/signup', { email: username, password });
+        const res = await axios.post('/auth/signup', { email: username, password });
         if(res.data.success) {
             window.location.assign('/');
         } else {
