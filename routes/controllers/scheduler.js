@@ -54,8 +54,8 @@ const weeklyScheduler = async (email, { day, time }) => {
 
   const [hour, minute, second] = time.split(':');
   // sec+' '+min+' '+hour+' '+'* * Sunday'
-  // cron.schedule(`${second} ${minute} ${hour} * * ${day}`, async () => {
-  cron.schedule('*/30 * * * * *', async () => {
+  cron.schedule(`${second} ${minute} ${hour} * * ${day}`, async () => {
+  // cron.schedule('*/30 * * * * *', async () => {
     console.log('running a task every week');
 
     try {
