@@ -19,7 +19,7 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new GoogleStrategy({
     clientID: keys.client_id,
     clientSecret: keys.secret,
-    callbackURL: "https://emailserver-backend.herokuapp.com/auth/google/email",
+    callbackURL: "https://flipr-emaily.herokuapp.com/auth/google/email",
     userProfileURL:"https://www.googleapis.com/oauth2/v3/userinfo"
   },
 
