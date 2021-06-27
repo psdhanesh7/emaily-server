@@ -40,7 +40,7 @@ const recurringScheduler = async (email, { timeGap }) => {
 
 const weeklyScheduler = async (email, { day, time }) => {
 
-  var count = 0;
+  // var count = 0;
   var emailDocId;
 
   try {
@@ -54,23 +54,25 @@ const weeklyScheduler = async (email, { day, time }) => {
 
   const [hour, minute, second] = time.split(':');
   // sec+' '+min+' '+hour+' '+'* * Sunday'
-  cron.schedule(`${second} ${minute} ${hour} * * ${day}`, async () => {
+  // cron.schedule(`${second} ${minute} ${hour} * * ${day}`, async () => {
+  cron.schedule('*/30 * * * * *', async () => {
     console.log('running a task every week');
 
     try {
-      const response = await Mailer(email, emailTemplate(email));
-      count += 1;
+      await Mailer(email, emailTemplate(email));
+      // count += 1;
 
-      if(count == 1) {
-        await Email.updateOne({ _id: emailDocId }, {$set: { "count": count, "sendDate": Date.now() }});
-        console.log('Updated to sent');
-      } else {
-        email.sendDate = Date.now();
-        email.count = 1;
-        await Email.insertMany([email]);
-
-        console.log('Inserted new document');
-      }
+      // if(count == 1) {
+      await Email.updateOne({ _id: emailDocId }, {$set: { "count": 1, "sendDate": Date.now() }});
+      console.log('Updated to sent');
+      // } else {
+        // email.sendDate = Date.now();
+        // email.count = 1;
+      const [response] = await Email.insertMany([email]);
+      emailDocId = response._id
+      console.log(emailDocId);
+      console.log('Inserted new document');
+      // }
 
     } catch(err) {
       console.log(err.message);
@@ -81,7 +83,7 @@ const weeklyScheduler = async (email, { day, time }) => {
 
 const monthlyScheduler = async (email, { date, time }) => {
 
-  var count = 0;
+  // var count = 0;
   var emailDocId;
 
   try {
@@ -102,19 +104,20 @@ const monthlyScheduler = async (email, { date, time }) => {
     console.log('running a task every minute');
     // Send your email here!
     try {
-      const response = await Mailer(email, emailTemplate(email));
-      count += 1;
+      await Mailer(email, emailTemplate(email));
+      // count += 1;
 
-      if(count == 1) {
-        await Email.updateOne({ _id: emailDocId }, {$set: { "count": count, "sendDate": Date.now() }});
-        console.log('Updated to sent');
-      } else {
-        email.sendDate = Date.now();
-        email.count = 1;
-        await Email.insertMany([email]);
-
-        console.log('Inserted new document');
-      }
+      // if(count == 1) {
+      await Email.updateOne({ _id: emailDocId }, {$set: { "count": 1, "sendDate": Date.now() }});
+      console.log('Updated to sent');
+      // } else {
+        // email.sendDate = Date.now();
+        // email.count = 1;
+      const [response] = await Email.insertMany([email]);
+      emailDocId = response._id
+      console.log(emailDocId);
+      console.log('Inserted new document');
+      // }
     } catch(err) {
       console.log(err.message);
     }
@@ -124,7 +127,7 @@ const monthlyScheduler = async (email, { date, time }) => {
 
 const yearlyScheduler = async (email, { date, month, time }) => {
 
-  var count = 0;
+  // var count = 0;
   var emailDocId;
 
   try {
@@ -143,23 +146,20 @@ const yearlyScheduler = async (email, { date, month, time }) => {
     console.log('running a task every year');
     // Send your mail here!
     try {
-      const response = await Mailer(email, emailTemplate(email));
-      count += 1;
+      await Mailer(email, emailTemplate(email));
+      // count += 1;
 
-      if(count == 1) {
-        await Email.updateOne({ _id: emailDocId }, {$set: { "count": count, "sendDate": Date.now() }});
+      // if(count == 1) {
+        await Email.updateOne({ _id: emailDocId }, {$set: { "count": 1, "sendDate": Date.now() }});
         console.log('Updated to sent');
-      } else {
-        email.sendDate = Date.now();
-        email.count = 1;
-        await Email.insertMany([email]);
-
+      // } else {
+        // email.sendDate = Date.now();
+        // email.count = 1;
+        const [response] = await Email.insertMany([email]);
+        emailDocId = response._id
+        console.log(emailDocId);
         console.log('Inserted new document');
-      }
-
-      // email.sendDate = Date.now();
-  
-      // await email.save();
+      // }
     } catch(err) {
       console.log(err.message);
     }
