@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const passport = require('passport');;
 
 require('./models/User');
 require('./models/Email');
@@ -22,11 +23,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
+app.use(passport.initialize());
 
 app.use('/auth', authRouter);
 app.use('/api/emails', emailRouter);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, (err) => {
     if(err) return console.log(err);
