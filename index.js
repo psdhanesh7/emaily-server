@@ -23,14 +23,16 @@ mongoose.connect(keys.mongoURI, {
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(session({ 
-    secret: keys.secret,
-    resave: true,
+    secret: 'fafadsdfafddsa',
+    resave: false,
     saveUninitialized: true,
-    cookie: {}
+    cookie: { secure: true }
 }));
 app.use(cors());
 app.use(
