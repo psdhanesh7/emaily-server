@@ -19,8 +19,9 @@ router.get('/history', authenticatedOnly, async (req, res) => {
 });
 
 router.get('/scheduled', authenticatedOnly, async (req, res) => {
+    console.log(req.user);
     try {
-        const emails = await Email.find({ _user: req.user.id, count: { $eq: 0 } });
+        const emails = await Email.find({ _user: req.user.id, "count": { $eq: 0 } });
         res.send({ success: true, emails });
     } catch(err) {
         res.send({ success: false, message: err.message });
@@ -28,16 +29,17 @@ router.get('/scheduled', authenticatedOnly, async (req, res) => {
 })
 
 router.post('/recurring', authenticatedOnly, async (req, res) => {
-    const { title, subject, body, recipients, schedule } = req.body;
+    const { subject, body, recipients, schedule } = req.body;
     
     const email = {
-        title,
+        from: req.user.email,
         subject,
         body,
         recipients: recipients.split(',').map(recipient => recipient.trim()),
         _user: req.user.id,
         createdDate: Date.now(),
-        type: 'weekly'
+        type: 'weekly',
+        schedule
     };
 
     try {
@@ -50,16 +52,17 @@ router.post('/recurring', authenticatedOnly, async (req, res) => {
 
 router.post('/weekly', authenticatedOnly, async (req, res) => {
 
-    const { title, subject, body, recipients, schedule } = req.body;
+    const { subject, body, recipients, schedule } = req.body;
 
     const email = {
-        title,
+        from: req.user.email,
         subject,
         body,
         recipients: recipients.split(',').map(recipient => recipient.trim()),
         _user: req.user.id,
         createdDate: Date.now(),
-        type: 'weekly'
+        type: 'weekly',
+        schedule
     };
 
     try {
@@ -72,16 +75,17 @@ router.post('/weekly', authenticatedOnly, async (req, res) => {
 });
 
 router.post('/monthly', authenticatedOnly, async (req, res) => {
-    const { title, subject, body, recipients, schedule } = req.body;
+    const { subject, body, recipients, schedule } = req.body;
 
     const email = {
-        title,
+        from: req.user.email,
         subject,
         body,
         recipients: recipients.split(',').map(recipient => recipient.trim()),
         _user: req.user.id,
         createdDate: Date.now(),
-        type: 'monthly'
+        type: 'monthly',
+        schedule
     };
 
     console.log(email);
@@ -95,16 +99,17 @@ router.post('/monthly', authenticatedOnly, async (req, res) => {
 });
 
 router.post('/yearly', authenticatedOnly, async (req, res) => {
-    const { title, subject, body, recipients, schedule } = req.body;
+    const { subject, body, recipients, schedule } = req.body;
 
     const email = {
-        title,
+        from: req.user.email,
         subject,
         body,
         recipients: recipients.split(',').map(recipient => recipient.trim()),
         _user: req.user.id,
         createdDate: Date.now(),
-        type: 'yearly'
+        type: 'yearly',
+        schedule
     };
     
     try {

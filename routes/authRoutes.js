@@ -103,6 +103,7 @@ router.get('/google/email',
     try {
       console.log(req.user);
       const token = await jwt.sign({id: req.user._id}, keys.JWT_SECRET_TOKEN);
+      console.log(token);
       return res.json({success: true, token})
     } catch(err) {
       return res.send({success: false, message: err.message});

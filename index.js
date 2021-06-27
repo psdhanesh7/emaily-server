@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const passport = require('passport');;
+const passport = require('passport');
+const cors = require('cors');
 
 require('./models/User');
 require('./models/Email');
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(passport.initialize());
+app.use(cors());
 
 app.use('/auth', authRouter);
 app.use('/api/emails', emailRouter);
