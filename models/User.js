@@ -11,25 +11,26 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
-        required: true
-    }
+        required: false
+    },
+    googleId: String
 });
 
-UserSchema.pre('save', async function (next){
-    const user = this;
-    if (this.isModified('password') || this.isNew) {
-        try {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(user.password, salt, null);
-            user.password = hashedPassword;
-            next();
-        } catch(err) {
-            return next(err);
-        }
-    } else {
-        return next();
-    }
-});
+// UserSchema.pre('save', async function (next){
+//     const user = this;
+//     if (this.isModified('password') || this.isNew) {
+//         try {
+//             const salt = await bcrypt.genSalt(10);
+//             const hashedPassword = await bcrypt.hash(user.password, salt, null);
+//             user.password = hashedPassword;
+//             next();
+//         } catch(err) {
+//             return next(err);
+//         }
+//     } else {
+//         return next();
+//     }
+// });
 
 UserSchema.methods.comparePassword =  async function(passw, next) {
 

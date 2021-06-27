@@ -3,10 +3,29 @@ const router = require('express').Router();
 
 const { weeklyScheduler, monthlyScheduler, yearlyScheduler, recurringScheduler } = require('./controllers/scheduler')
 const { authenticatedOnly } = require('../middlewares/authMiddleware');
-const emailTemplate = require('../services/emailTemplates/emailTemplate');
-const Mailer = require('../services/Mailer');
+
 
 const Email = mongoose.model('emails');
+
+router.get('/history', authenticatedOnly, async (req, res) => {
+
+    try {
+        const emails = await Email.find({ _user: req.user.id, count: { $gt: 0 } });
+        res.send({ success: true, emails });
+
+    } catch(err) {
+        res.send({success: false, message: err.message});
+    }
+});
+
+router.get('/scheduled', authenticatedOnly, async (req, res) => {
+    try {
+        const emails = await Email.find({ _user: req.user.id, count: { $eq: 0 } });
+        res.send({ success: true, emails });
+    } catch(err) {
+        res.send({ success: false, message: err.message });
+    }
+})
 
 router.post('/recurring', authenticatedOnly, async (req, res) => {
     const { title, subject, body, recipients, schedule } = req.body;
@@ -96,26 +115,26 @@ router.post('/yearly', authenticatedOnly, async (req, res) => {
     }
 })
 
-router.post('/', authenticatedOnly, async (req, res) => {
-    const { title, subject, body, recipients } = req.body;
-    console.log(title, subject, body, recipients.split(',').map(recipient => recipient.trim()), req.user);
+// router.post('/', authenticatedOnly, async (req, res) => {
+//     const { title, subject, body, recipients } = req.body;
+//     console.log(title, subject, body, recipients.split(',').map(recipient => recipient.trim()), req.user);
 
-    const email = new Email({
-        title,
-        subject,
-        body,
-        recipients: recipients.split(',').map(recipient => recipient.trim()),
-        _user: req.user.id,
-        createdDate: Date.now(),
+//     const email = new Email({
+//         title,
+//         subject,
+//         body,
+//         recipients: recipients.split(',').map(recipient => recipient.trim()),
+//         _user: req.user.id,
+//         createdDate: Date.now(),
         
-    });
+//     });
 
-    // Great place to create an email
-    const response = await Mailer(email, emailTemplate(email));
-    // const response = mailer.send();
+//     // Great place to create an email
+//     const response = await Mailer(email, emailTemplate(email));
+//     // const response = mailer.send();
 
-    res.send(response);
+//     res.send(response);
 
-});
+// });
 
 module.exports = router;
