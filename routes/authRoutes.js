@@ -7,6 +7,15 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const keys = require('../config/keys');
 const passport = require('passport');
 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  const user = await User.findById(id);
+  done(null, user);
+})
+
 passport.use(new GoogleStrategy({
     clientID: keys.client_id,
     clientSecret: keys.secret,
@@ -19,6 +28,7 @@ passport.use(new GoogleStrategy({
     //   return cb(err, user);
     // });
     console.log(profile.emails[0].value);
+    // console.log(email);
 
     try {
       const existingUser = await User.findOne({ googleId: profile.id });
@@ -83,19 +93,22 @@ router.post('/login', async (req, res) => {
 })
 
 
-
-
-
 router.get('/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/email', 
   passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
+  async function(req, res) {
     // Successful authentication, redirect home.
-    console.log(req.user);
-    res.redirect('/');
-  });
+    try {
+      console.log(req.user);
+      const token = await jwt.sign({id: req.user._id}, keys.JWT_SECRET_TOKEN);
+      return res.json({success: true, token})
+    } catch(err) {
+      return res.send({success: false, message: err.message});
+    }
+  }
+);
 
 
 module.exports = router;
