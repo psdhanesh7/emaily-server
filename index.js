@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
+const session = require('express-session')
 
 require('./models/User');
 require('./models/Email');
@@ -25,6 +26,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
+app.use(session({ secret: keys.secret }));
 app.use(cors());
 app.use(
     cookieSession({
