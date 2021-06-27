@@ -29,7 +29,8 @@ app.use(cookieParser());
 app.use(session({ 
     secret: keys.secret,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {}
 }));
 app.use(cors());
 app.use(
