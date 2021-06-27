@@ -4,7 +4,9 @@ const User = require('mongoose').model('User');
 
 const authenticatedOnly = async (req, res, next) => {
 
-    if(req.isAuthenticated()) next();
+    console.log(req.isAuthenticated());
+    console.log(req.user);
+    if(req.isAuthenticated() || req.user) return next();
 
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
