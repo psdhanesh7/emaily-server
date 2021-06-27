@@ -30,6 +30,11 @@ app.use(cors());
 app.use('/auth', authRouter);
 app.use('/api/emails', emailRouter);
 
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+});
+
 if (process.env.NODE_ENV === 'production') {
     // Express will serve up production assets
     // like our main.js file, or main.css file!
