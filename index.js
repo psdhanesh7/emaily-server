@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use('/auth', authRouter);
 app.use('/api/emails', emailRouter);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, (err) => {
     if(err) return console.log(err);

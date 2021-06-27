@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('mongoose').model('User');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -12,10 +13,27 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:3000/auth/google/email",
     userProfileURL:"https://www.googleapis.com/oauth2/v3/userinfo"
   },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
+
+  async function(accessToken, refreshToken, profile, cb) {
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //   return cb(err, user);
+    // });
+    console.log(profile.emails[0].value);
+
+    try {
+      const existingUser = await User.findOne({ googleId: profile.id });
+      if(existingUser) {
+        cb(null, existingUser);
+      } else {
+        // console.log(profile);
+        const user = await new User({ googleId: profile.id, email: profile.emails[0].value }).save();
+        console.log(user);
+        cb(null, user);
+      }
+    } catch(err) {
+      console.log(err.message);
+    }
+
   }
 ));
 
@@ -25,7 +43,14 @@ router.post('/signup', async (req, res) => {
     if(!email || !password) return res.json({success: false, message: 'Email or password not entered'});
 
     try {
-        const user = new User({ email: email, password: password });
+
+        const existingUser = await User.findOne({ email: email });
+        if(existingUser) return res.json({success: false, message: 'Email already registered'});
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt, null);
+
+        const user = new User({ email: email, password: hashedPassword });
         await user.save();
 
         res.json({success: true, message: 'User created succesfully'});
@@ -42,6 +67,7 @@ router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email: email });
         if(!user) return res.json({success: false, message: 'Invalid username or password'});
+        if(user.googleId) return res.json({success: false, message: 'Invalid username or password'});
 
         user.comparePassword(password, async (err, isMatch) => {
             if(err) return res.json({success: false, message: err.message});
@@ -60,13 +86,14 @@ router.post('/login', async (req, res) => {
 
 
 
-router.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
+router.get('/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/auth/google/email', 
+router.get('/google/email', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
+    console.log(req.user);
     res.redirect('/');
   });
 
