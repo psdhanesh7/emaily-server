@@ -1,0 +1,12 @@
+.subject {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.type {
+  background-color: #187d92;
+}
+.goBack {
+  border-color: #187d92 !important;
+  color: #187d92 !important;
+  margin-top: 10px;
+}

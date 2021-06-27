@@ -1,0 +1,51 @@
+.b{
+    margin-top: 5%;
+    margin-left: 10%;
+    
+}
+.input{
+    display: flex;
+    margin-bottom: 2%;
+}
+.mailbody{
+    margin-left: 9%;
+    width: 100%;
+    height: 20%;
+    margin-bottom: 2%;
+}
+.send{
+    margin-left: 95%;
+
+}
+.check{
+    float:left;
+    margin-bottom: 2%;
+
+
+}
+#c{
+    padding-left: 8%;
+}
+.schedule{
+   display: flex;
+    
+    
+}
+#w{
+    margin-left:15%;
+
+}
+#dt{
+    padding-left:3%;
+}
+.sch{
+    display : block;
+    padding-left:2% ;
+}
+#sc{
+    margin-bottom: 2%;
+}
+
+#i{
+    padding-left: 8%;
+}
