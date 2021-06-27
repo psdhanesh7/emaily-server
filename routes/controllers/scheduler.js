@@ -44,6 +44,8 @@ const weeklyScheduler = async (email, { day, time }) => {
   var emailDocId;
 
   try {
+    console.log(time);
+
     const emailDoc = new Email(email);
     const response = await emailDoc.save();
     emailDocId = response._id;

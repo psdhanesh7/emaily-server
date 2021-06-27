@@ -29,7 +29,11 @@ router.get('/scheduled', authenticatedOnly, async (req, res) => {
 })
 
 router.post('/recurring', authenticatedOnly, async (req, res) => {
+    console.log(req.body);
     const { subject, body, recipients, schedule } = req.body;
+
+    if(recipients === ", ") return res.send({success: false, message: 'No recipients'})
+
     
     const email = {
         from: req.user.email,
@@ -52,7 +56,10 @@ router.post('/recurring', authenticatedOnly, async (req, res) => {
 
 router.post('/weekly', authenticatedOnly, async (req, res) => {
 
+    console.log(req.body);
     const { subject, body, recipients, schedule } = req.body;
+
+    if(recipients === ", ") return res.send({success: false, message: 'No recipients'})
 
     const email = {
         from: req.user.email,
@@ -77,6 +84,9 @@ router.post('/weekly', authenticatedOnly, async (req, res) => {
 router.post('/monthly', authenticatedOnly, async (req, res) => {
     const { subject, body, recipients, schedule } = req.body;
 
+    if(recipients === ", ") return res.send({success: false, message: 'No recipients'})
+
+
     const email = {
         from: req.user.email,
         subject,
@@ -100,6 +110,9 @@ router.post('/monthly', authenticatedOnly, async (req, res) => {
 
 router.post('/yearly', authenticatedOnly, async (req, res) => {
     const { subject, body, recipients, schedule } = req.body;
+
+    if(recipients === ", ") return res.send({success: false, message: 'No recipients'})
+
 
     const email = {
         from: req.user.email,
