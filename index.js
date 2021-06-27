@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const cors = require('cors');
+const cookieSession = require('cookie-session');
 
 require('./models/User');
 require('./models/Email');
@@ -24,8 +25,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(passport.initialize());
 app.use(cors());
+app.use(
+    cookieSession({
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        keys: [keys.cookieKey]
+    })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/auth', authRouter);
 app.use('/api/emails', emailRouter);

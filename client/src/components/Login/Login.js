@@ -54,7 +54,7 @@ export default function Login({ setToken }) {
                                         <div className="group"> <label for="pass" className="label">Password</label> <input id="pass" type="password" className="input" data-type="password" placeholder="Enter your password" value={password} onChange = {(e) => setPassword(e.target.value)}/> </div>
                                         <div className="sign">  
                                         <div className="group"> <input type="submit" className="button" value="Sign In" onClick={handleSignIn}/> </div>
-                                        <div className="group"><button  className="button" type="submit" onClick={handleGoogleAuth}><FontAwesomeIcon icon={faGoogle} style={{marginRight:"10%",fontSize:"1.5rem"}}  /><span className="buttonText">Sign in with Google</span></button></div>
+                                        <div className="group"><a href="/auth/google"><button  className="button" type="submit"><FontAwesomeIcon icon={faGoogle} style={{marginRight:"10%",fontSize:"1.5rem"}}  /><span className="buttonText">Sign in with Google</span></button></a></div>
                                         </div>
                                         <div className="hr"></div>
                                         {/* <div className="foot"> <a href="#">Forgot Password?</a> </div> */}
