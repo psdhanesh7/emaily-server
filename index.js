@@ -39,7 +39,7 @@ app.use(session({
     secret: 'fafadsdfafddsa',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
+    cookie: { secure: false }
 }));
 app.use(cors());
 
@@ -49,12 +49,12 @@ app.use(passport.session());
 app.use('/auth', authRouter);
 app.use('/api/emails', emailRouter);
 
-app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    next();
-});
+// app.all('/*', function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     next();
+// });
 
-if (process.env.NODE_ENV === 'production') {
+// if (process.env.NODE_ENV === 'production') {
     // Express will serve up production assets
     // like our main.js file, or main.css file!
     app.use(express.static('client/build'));
@@ -65,7 +65,7 @@ if (process.env.NODE_ENV === 'production') {
     app.get('*', (req, res) => {
       res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     });
-  }
+//   }
 
 const PORT = process.env.PORT || 3000;
 
