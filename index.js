@@ -1,10 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const passport = require('passport');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
 const session = require('express-session')
+const passport = require('passport');
+
 
 require('./models/User');
 require('./models/Email');
@@ -28,6 +29,12 @@ app.set('trust proxy', 1);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
+app.use(
+    cookieSession({
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        keys: [keys.cookieKey]
+    })
+);
 app.use(session({ 
     secret: 'fafadsdfafddsa',
     resave: false,
@@ -35,12 +42,7 @@ app.use(session({
     cookie: { secure: true }
 }));
 app.use(cors());
-app.use(
-    cookieSession({
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        keys: [keys.cookieKey]
-    })
-);
+
 app.use(passport.initialize());
 app.use(passport.session());
 
