@@ -97,10 +97,7 @@ router.get('/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/email', 
-  passport.authenticate('google', { failureRedirect: '/login'}),
-  (req, res) => {
-    res.redirect('/home');
-  }
+  passport.authenticate('google', { failureRedirect: '/login', successRedirect: '/home'}),
 );
 
 
