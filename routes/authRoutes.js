@@ -97,7 +97,7 @@ router.get('/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/email', 
-  passport.authenticate('google', { failureRedirect: '/login', successRedirect: '/home'}),
+  passport.authenticate('google', { failureRedirect: '/login', successRedirect: 'http://localhost:3001/home'}),
 );
 
 

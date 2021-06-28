@@ -76,6 +76,7 @@ router.post('/weekly', authenticatedOnly, async (req, res) => {
         await weeklyScheduler(email, schedule);
         res.send({ success: true, message: 'Mail scheduled successfully' });
     } catch(err) {
+        console.log(err);
         res.status(401).send(err);
     }
 
